@@ -1,7 +1,7 @@
 /* global exports */
 "use strict";
 
-// module DOM.HTML.Navigator
+// module DOM.HTML.Navigator.Geolocation
 
 exports.geolocation = function (navigator) {
     return navigator.geolocation;

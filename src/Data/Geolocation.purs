@@ -1,40 +1,42 @@
 module Data.Geolocation (
-    Coordinates(),
-    Geolocation(),
-    Position(),
-    PositionError(),
-    PositionOptions()
+    class Geolocation, LOCATION, Coordinates, Position, PositionError,
+    PositionOptions, clearWatch, getCurrentPosition, watchPosition
 ) where
 
-import Data.Date (Date())
-import Data.Maybe (Maybe())
-import Prelude
+import Control.Monad.Eff (Eff)
+import Data.Date (Date)
+import Data.Maybe (Maybe)
+import Prelude (Unit)
 
 {-|
   | The Geolocation object is used by scripts to programmatically determine the
   | location information associated with the hosting device.
 -}
 class Geolocation g where
-    getCurrentPosition :: forall eff. g
-                            (Position -> Eff (location :: LOCATION | eff) Unit)
-                            (
-                                PositionError
+    getCurrentPosition :: forall eff. g -> (
+                                Position ->
                                 Eff (location :: LOCATION | eff) Unit
-                            )
-                            PositionOptions
+                            ) -> (
+                                PositionError ->
+                                Eff (location :: LOCATION | eff) Unit
+                            ) -> PositionOptions ->
                             Eff (location :: LOCATION | eff) Unit
 
-    watchPosition      :: forall eff. g
-                            (Position -> Eff (location :: LOCATION | eff) Unit)
-                            (
-                                PositionError
-                                Eff (location :: LOCATION | eff) Unit
-                            )
-                            PositionOptions
-                            Eff (location :: LOCATION | eff) Int
-
-    clearWatch         :: forall eff. g -> Int
+    watchPosition :: forall eff. g -> (
+                            Position ->
                             Eff (location :: LOCATION | eff) Unit
+                        ) -> (
+                            PositionError ->
+                            Eff (location :: LOCATION | eff) Unit
+                        ) -> PositionOptions ->
+                         Eff (location :: LOCATION | eff) Int
+
+    clearWatch :: forall eff. g -> Int -> Eff (location :: LOCATION | eff) Unit
+
+{-|
+  | The effect type of the location side effect.
+-}
+foreign import data LOCATION :: !
 
 {-|
   | Coordinates is the datatype of the coordinates of a position.
