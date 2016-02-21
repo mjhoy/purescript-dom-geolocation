@@ -2,6 +2,7 @@
 src/Main.purs
 main.js
 index.html
+.webpack.js
 
 # Created by https://www.gitignore.io/api/purescript,bower,vim,node
 
