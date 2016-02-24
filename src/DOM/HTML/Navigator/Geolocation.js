@@ -4,35 +4,47 @@
 // module DOM.HTML.Navigator.Geolocation
 
 exports.geolocation = function (navigator) {
-    return navigator.geolocation;
+    return function () {
+        return navigator.geolocation;
+    };
 };
 
-exports.getCurrentPosition = function (geolocation) {
+exports.fGetCurrentPosition = function (geolocation) {
     return function (successCallback) {
         return function (errorCallback) {
             return function (options) {
-                return geolocation.getCurrentPosition(successCallback,
-                                                      errorCallback,
-                                                      options);
+                return function () {
+                    geolocation.getCurrentPosition(function (position) {
+                        successCallback(position)();
+                    }, function (positionError) {
+                        errorCallback(positionError)();
+                    }, options);
+                };
             };
         };
     };
 };
 
-exports.watchPosition = function (geolocation) {
+exports.fWatchPosition = function (geolocation) {
     return function (successCallback) {
         return function (errorCallback) {
             return function (options) {
-                return geolocation.watchPosition(successCallback,
-                                                 errorCallback,
-                                                 options);
-            };
+                return function () {
+                    return geolocation.getCurrentPosition(function (position) {
+                        successCallback(position)();
+                    }, function (positionError) {
+                        errorCallback(positionError)();
+                    }, options);
+                };
+           };
         };
     };
 };
 
-exports.clearWatch = function (geolocation) {
+exports.fClearWatch = function (geolocation) {
     return function (watchId) {
-        return geolocation.clearWatch(watchId);
+        return function () {
+            geolocation.clearWatch(watchId);
+        };
     };
 };

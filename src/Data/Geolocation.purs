@@ -43,7 +43,7 @@ foreign import data LOCATION :: !
   | The geographic coordinate reference system used by the attributes in this
   | interface is the World Geodetic System (2d).
 -}
-newtype Coordinates = Coordinates {
+type Coordinates = {
     latitude         :: Number,
     longitude        :: Number,
     altitude         :: Maybe Number,
@@ -57,7 +57,7 @@ newtype Coordinates = Coordinates {
   | Postion is the container for the geolocation information returned by this
   | API.
 -}
-newtype Position = Position {
+type Position = {
     coords    :: Coordinates,
     timestamp :: Date
 }
@@ -66,7 +66,7 @@ newtype Position = Position {
   | PositionError is the datatype of the error which might be returned by
   | getCurrentPosition() and watchPosition().
 -}
-newtype PositionError = PositionError {
+type PositionError = {
     code    :: Int,
     message :: String
 }
@@ -75,7 +75,7 @@ newtype PositionError = PositionError {
   | PositionOptions is the data type of the options for getCurrentPosition() and
   | watchPosition().
 -}
-newtype PositionOptions = PositionOptions {
+type PositionOptions = {
     enableHighAccuracy :: Boolean,
     timeout            :: Int,
     maximumAge         :: Int

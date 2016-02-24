@@ -1,6 +1,6 @@
 # Debugging files
 src/Main.purs
-main.js
+app.js
 index.html
 .webpack.js
 

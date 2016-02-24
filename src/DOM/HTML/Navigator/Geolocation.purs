@@ -6,7 +6,7 @@ import Control.Monad.Eff (Eff)
 import Data.Geolocation (
     class Geolocation, LOCATION, Position, PositionError, PositionOptions
 )
-import Data.Maybe (Maybe)
+import Data.Nullable (Nullable)
 import DOM (DOM)
 import DOM.HTML.Types (Navigator)
 import Prelude (Unit)
@@ -21,7 +21,7 @@ foreign import fGetCurrentPosition :: forall eff. NavigatorGeolocation -> (
                                         ) -> (
                                            PositionError ->
                                            Eff (location :: LOCATION | eff) Unit
-                                        ) -> PositionOptions -> 
+                                        ) -> PositionOptions ->
                                         Eff (location :: LOCATION | eff) Unit
 
 {-|
@@ -48,7 +48,7 @@ foreign import fClearWatch :: forall eff. NavigatorGeolocation -> Int ->
 -}
 foreign import geolocation :: forall eff. Navigator ->
                                 Eff (dom :: DOM | eff)
-                                    (Maybe NavigatorGeolocation)
+                                    (Nullable NavigatorGeolocation)
 
 {-|
   | NavigatorGeolocation is a dummy type for the geolocation object. It can
