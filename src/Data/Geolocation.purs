@@ -1,11 +1,14 @@
 module Data.Geolocation (
     class Geolocation, LOCATION, Coordinates, Position, PositionError,
-    PositionOptions, clearWatch, getCurrentPosition, watchPosition
+    PositionOptions, clearWatch, defaultOptions, getCurrentPosition,
+    watchPosition
 ) where
 
 import Control.Monad.Eff (Eff)
 import Data.Date (Date)
+import Data.Int (ceil)
 import Data.Maybe (Maybe)
+import Global (infinity)
 import Prelude (Unit)
 
 {-|
@@ -79,4 +82,14 @@ type PositionOptions = {
     enableHighAccuracy :: Boolean,
     timeout            :: Int,
     maximumAge         :: Int
+}
+
+{-|
+  | defaultOptions is an PositionOptions object with the defaults.
+-}
+defaultOptions :: PositionOptions
+defaultOptions = {
+    enableHighAccuracy: false,
+    timeout           : ceil infinity,
+    maximumAge        : 0
 }

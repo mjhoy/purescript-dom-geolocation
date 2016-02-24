@@ -25,7 +25,7 @@ The effect type of the location side effect.
 #### `Coordinates`
 
 ``` purescript
-newtype Coordinates
+type Coordinates = { latitude :: Number, longitude :: Number, altitude :: Maybe Number, accuracy :: Number, altitudeAccuracy :: Maybe Number, heading :: Maybe Number, speed :: Maybe Number }
 ```
 
 
@@ -36,7 +36,7 @@ interface is the World Geodetic System (2d).
 #### `Position`
 
 ``` purescript
-newtype Position
+type Position = { coords :: Coordinates, timestamp :: Date }
 ```
 
 
@@ -46,7 +46,7 @@ API.
 #### `PositionError`
 
 ``` purescript
-newtype PositionError
+type PositionError = { code :: Int, message :: String }
 ```
 
 
@@ -56,11 +56,20 @@ getCurrentPosition() and watchPosition().
 #### `PositionOptions`
 
 ``` purescript
-newtype PositionOptions
+type PositionOptions = { enableHighAccuracy :: Boolean, timeout :: Int, maximumAge :: Int }
 ```
 
 
 PositionOptions is the data type of the options for getCurrentPosition() and
 watchPosition().
+
+#### `defaultOptions`
+
+``` purescript
+defaultOptions :: PositionOptions
+```
+
+
+defaultOptions is an PositionOptions object with the defaults.
 
 

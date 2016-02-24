@@ -3,7 +3,7 @@
 #### `geolocation`
 
 ``` purescript
-geolocation :: forall eff. Navigator -> Eff (dom :: DOM | eff) (Maybe NavigatorGeolocation)
+geolocation :: forall eff. Navigator -> Eff (dom :: DOM | eff) (Nullable NavigatorGeolocation)
 ```
 
 

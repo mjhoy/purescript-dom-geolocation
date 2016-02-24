@@ -13,6 +13,8 @@
   "dependencies": {
     "purescript-eff": "^0.1.2",
     "purescript-datetime": "^0.9.1",
-    "purescript-dom": "^0.2.17"
+    "purescript-dom": "^0.2.17",
+    "purescript-globals": "^0.2.2",
+    "purescript-integers": "^0.2.1"
   }
 }
