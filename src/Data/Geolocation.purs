@@ -7,7 +7,7 @@ module Data.Geolocation (
 import Control.Monad.Eff (Eff)
 import Data.Date (Date)
 import Data.Int (ceil)
-import Data.Maybe (Maybe)
+import Data.Nullable (Nullable)
 import Global (infinity)
 import Prelude (Unit)
 
@@ -49,11 +49,11 @@ foreign import data LOCATION :: !
 type Coordinates = {
     latitude         :: Number,
     longitude        :: Number,
-    altitude         :: Maybe Number,
+    altitude         :: Nullable Number,
     accuracy         :: Number,
-    altitudeAccuracy :: Maybe Number,
-    heading          :: Maybe Number,
-    speed            :: Maybe Number
+    altitudeAccuracy :: Nullable Number,
+    heading          :: Nullable Number,
+    speed            :: Nullable Number
 }
 
 {-|
