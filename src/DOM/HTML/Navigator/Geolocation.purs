@@ -2,7 +2,9 @@ module DOM.HTML.Navigator.Geolocation (
     NavigatorGeolocation, geolocation
 ) where
 
+import Control.Monad.Aff (Aff, makeAff)
 import Control.Monad.Eff (Eff)
+import Control.Monad.Eff.Exception (error)
 import Data.Geolocation (
     class Geolocation, LOCATION, Position, PositionError, PositionOptions
 )
@@ -23,6 +25,12 @@ foreign import fGetCurrentPosition :: forall eff. NavigatorGeolocation -> (
                                            Eff (location :: LOCATION | eff) Unit
                                         ) -> PositionOptions ->
                                         Eff (location :: LOCATION | eff) Unit
+
+getCurrentPositionAff :: forall eff
+    . NavigatorGeolocation
+    -> PositionOptions
+    -> Aff (location :: LOCATION | eff) Position
+getCurrentPositionAff g o = makeAff \err success -> fGetCurrentPosition g success (\e -> err (error e.message)) o
 
 {-|
   | fWatchPosition is the foreign interface for navigator.watchPosition
