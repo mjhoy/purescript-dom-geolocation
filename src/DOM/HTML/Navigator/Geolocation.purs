@@ -1,5 +1,5 @@
 module DOM.HTML.Navigator.Geolocation (
-    NavigatorGeolocation, geolocation
+    NavigatorGeolocation, geolocation, getCurrentPositionAff
 ) where
 
 import Control.Monad.Aff (Aff, makeAff)
