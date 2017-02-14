@@ -1,6 +1,4 @@
-module DOM.HTML.Navigator.Geolocation (
-    NavigatorGeolocation, geolocation
-) where
+module DOM.HTML.Navigator.Geolocation where
 
 import Control.Monad.Aff (Aff, makeAff)
 import Control.Monad.Eff (Eff)
