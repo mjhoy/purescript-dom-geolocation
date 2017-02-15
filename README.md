@@ -3,31 +3,22 @@ This is a purescript library to interact with the [Geolocation API](https://www.
 
 ### Example:
 ```purescript
-import Control.Monad.Eff (Eff())  
-import Control.Monad.Eff.Console (CONSOLE, log)  
+import Control.Error.Util (hush)
+import Control.Monad.Aff (attempt)
+import Control.Monad.Eff.Class (liftEff)
+import Control.Monad.Eff.Exception (Error)
 import Data.Geolocation (LOCATION, Position, PositionError, defaultOptions, getCurrentPosition)
-import Data.Maybe.Unsafe (fromJust)
-import Data.Nullable (toMaybe) 
-import DOM (DOM())
-import DOM.HTML (window)                                                         
-import DOM.HTML.Navigator.Geolocation (geolocation) 
+import Data.Maybe (Maybe(..))
+import Data.Nullable (toMaybe)
+import Data.Traversable (sequence)
+import DOM.HTML (window)
+import DOM.HTML.Navigator.Geolocation (Position, defaultOptions, deviceGeolocation, geolocation, getCurrentPositionAff)
 import DOM.HTML.Window (navigator)
-import Prelude (Unit, (>>=), (++), ($), bind, show)
+import Prelude (Unit, (>>=), (++), ($), (<<<), bind, join, pure, show)
 
-callback :: forall eff. Position -> Eff (console :: CONSOLE | eff) Unit 
-callback position = log $ show position.coords.latitude ++ ", "  ++ show position.coords.longitude
-
-errorCallback :: forall eff. PositionError -> Eff (console :: CONSOLE | eff) Unit
-errorCallback error = log error.message
-
-main :: forall eff. Eff (console :: CONSOLE, dom :: DOM, location :: LOCATION | eff) Unit
 main = do
-  -- Get the 'geolocation' object from the navigator
-  location <- window >>= navigator >>= geolocation  
-  
-  -- If the browser doesn't support geolocation, the object will be null
-  let geo = fromJust $ toMaybe location
-  
-  -- 'callback' gets called on success, 'errorCallback' on error
-  getCurrentPosition geo callback errorCallback defaultOptions 
+  deviceGeolocation :: Maybe NavigatorGeolocation <- liftEff $ window >>= navigator >>= geolocation >>= pure <<< toMaybe
+  position :: Either Error (Maybe Position) <- attempt <<< sequence $ getCurrentPositionAff defaultOptions <$> deviceGeolocation
+  let position' = join (hush position) :: Maybe Position
+  ...
 ```
