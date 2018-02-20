@@ -1,14 +1,15 @@
 module DOM.HTML.Navigator.Geolocation where
 
-import Control.Monad.Aff (Aff, makeAff)
+import Control.Monad.Aff (Aff, Error, makeAff, nonCanceler)
 import Control.Monad.Eff (Eff, kind Effect)
 import Control.Monad.Eff.Exception (error)
 import DOM (DOM)
 import DOM.HTML.Types (Navigator)
 import Data.Date (Date)
+import Data.Either (Either(..))
 import Data.Nullable (Nullable)
 import Data.Tuple (Tuple(..))
-import Prelude (Unit)
+import Prelude (Unit, discard, pure, (<<<))
 
 -- | The effect type of the location side effect.
 foreign import data LOCATION :: Effect
@@ -39,6 +40,12 @@ foreign import fGetCurrentPosition
   -> NavigatorGeolocation
   -> Eff (location :: LOCATION | eff) Unit
 
+-- Old Aff v3.x `makeAff` function.
+makeAff' :: forall a eff. ((Error -> Eff eff Unit) -> (a -> Eff eff Unit) -> Eff eff Unit) -> Aff eff a
+makeAff' raw = makeAff \callback -> do
+    raw (callback <<< Left) (callback <<< Right)
+    pure nonCanceler
+
 -- | The PureScript interface to `navigator.getCurrentPosition`
 getCurrentPositionAff
   :: forall eff
@@ -46,7 +53,7 @@ getCurrentPositionAff
   -> NavigatorGeolocation
   -> Aff (location :: LOCATION | eff) Position
 getCurrentPositionAff o g =
-  makeAff \err success -> fGetCurrentPosition o success (\e -> err (error e.message)) g
+  makeAff' \err success -> fGetCurrentPosition o success (\e -> err (error e.message)) g
 
 -- | The FFI for `geolocation.watchPosition`
 foreign import fWatchPosition
@@ -71,7 +78,7 @@ watchPositionAff
   -> NavigatorGeolocation
   -> Aff (location :: LOCATION | eff) (Tuple Position Int)
 watchPositionAff o g =
-  makeAff \err success -> fWatchPosition Tuple o success (\e -> err (error e.message)) g
+  makeAff' \err success -> fWatchPosition Tuple o success (\e -> err (error e.message)) g
 
 -- | The FFI for `geolocation.clearWatch`.
 foreign import fClearWatch
